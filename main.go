@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	_ "modernc.org/sqlite"
 )
@@ -67,9 +68,19 @@ func openEditor(initialContent string) (string, error) {
 	}
 	tmpFile.Close()
 
-	editor := getEditor()
+	editorFull := getEditor()
+	parts := strings.Fields(editorFull)
+	var filteredArgs []string
+	for _, arg := range parts[1:] {
+		if arg != "--wait" && arg != "-w" {
+			filteredArgs = append(filteredArgs, arg)
+		}
+	}
 
-	cmd := exec.Command(editor, tmpFile.Name())
+	executable := parts[0]
+	args := append(filteredArgs, tmpFile.Name())
+
+	cmd := exec.Command(executable, args...)
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
