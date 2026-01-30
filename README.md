@@ -10,7 +10,7 @@
 
 *   **Add Queries:** Save new queries with a given name. The content is edited using your default system editor (`EDITOR` environment variable, `vim` for Unix-like, `notepad` for Windows).
 *   **List Queries:** Display the names of all saved queries.
-*   **Show Query:** View the content of a specific saved query by its name.
+*   **Show Query:** View the content of a specific saved query by its name and **automatically copy it to the clipboard**.
 *   **Search Queries:** Find queries containing a specific text token within their body.
 *   **Edit Queries:** Modify the content of an existing query.
 *   **Delete Queries:** Remove saved queries.
@@ -49,6 +49,8 @@ qsave list
 ```
 
 ### Show a specific query
+
+Displays the query and **copies it to your clipboard**.
 
 ```bash
 qsave show <query-name>
