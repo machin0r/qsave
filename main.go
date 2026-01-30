@@ -178,15 +178,17 @@ func searchQuery(searchToken string, db *sql.DB) {
 }
 
 func listQueries(db *sql.DB) {
-	rows, err := db.Query("SELECT name, body FROM queries")
+	rows, err := db.Query("SELECT name FROM queries")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
+
+	fmt.Println("Saved Queries:")
 	for rows.Next() {
-		var name, body string
-		rows.Scan(&name, &body)
-		fmt.Printf("--- NAME: %s ---\n%s\n\n", name, body)
+		var name string
+		rows.Scan(&name)
+		fmt.Printf("  - %s\n", name)
 	}
 }
 
