@@ -1,5 +1,9 @@
 # qsave
 
+<p align="center">
+  <img src="assets/qsave.png" width="300" alt="qsave Logo">
+</p>
+
 `qsave` is a simple command-line interface (CLI) tool written in Go that allows you to easily save, list, search, edit, and manage frequently used SQL queries or any text snippets. It stores your queries in a local SQLite database, making them readily accessible from your terminal.
 
 ## Features
