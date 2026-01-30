@@ -1,0 +1,27 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Go build output
+/bin/
+/dist/
+
+# Go workspace
+/go.work
+/go.work.sum
+
+# Dependency cache (optional)
+vendor/
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Logs
+*.log
