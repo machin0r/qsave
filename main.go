@@ -169,7 +169,11 @@ func deleteQuery(queryName string, db *sql.DB) error {
 }
 
 func searchQuery(searchToken string, db *sql.DB) {
-	rows, _ := db.Query("SELECT name, body FROM queries WHERE body LIKE ?", "%"+searchToken+"%")
+	rows, err := db.Query("SELECT name, body FROM queries WHERE body LIKE ?", "%"+searchToken+"%")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
 	for rows.Next() {
 		var name, body string
 		rows.Scan(&name, &body)
