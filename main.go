@@ -230,6 +230,21 @@ func showQuery(queryName string, db *sql.DB) error {
 	return nil
 }
 
+func renameQuery(queryName string, newName string, db *sql.DB) error {
+	result, err := db.Exec("UPDATE queries SET name = ? WHERE name = ?", newName, queryName)
+	if err != nil {
+		return fmt.Errorf("failed to rename: %v", err)
+	}
+	rowsAffected, _ := result.RowsAffected()
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no query found with name '%s'", queryName)
+	}
+	fmt.Printf("Updated query %s to name %s ", queryName, newName)
+	return nil
+
+}
+
 func main() {
 	db, err := getOrCreateDB()
 	if err != nil {
@@ -238,7 +253,7 @@ func main() {
 	defer db.Close()
 
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: qsave [add|list|search|delete] [args]")
+		fmt.Println("Usage: qsave [add|list|search|delete|show|rename] [args]")
 		return
 	}
 
@@ -272,5 +287,10 @@ func main() {
 			log.Fatal("Please provide a name for the query to show")
 		}
 		showQuery(os.Args[2], db)
+	case "rename":
+		if len(os.Args) < 4 {
+			log.Fatal("Please provide the old name and the new name for the query")
+		}
+		renameQuery(os.Args[2], os.Args[3], db)
 	}
 }
