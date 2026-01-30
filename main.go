@@ -10,6 +10,8 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/atotto/clipboard"
+
 	_ "modernc.org/sqlite"
 )
 
@@ -218,6 +220,12 @@ func showQuery(queryName string, db *sql.DB) error {
 		return err
 	}
 	fmt.Printf("--- NAME: %s ---\n%s\n\n", name, body)
+
+	err = clipboard.WriteAll(body)
+	if err != nil {
+		return fmt.Errorf("failed to copy to clipboard: %w", err)
+	}
+	fmt.Println("Query copied to clipboard!")
 
 	return nil
 }
