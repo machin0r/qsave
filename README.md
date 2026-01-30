@@ -13,6 +13,7 @@
 *   **Show Query:** View the content of a specific saved query by its name and **automatically copy it to the clipboard**.
 *   **Search Queries:** Find queries containing a specific text token within their body.
 *   **Edit Queries:** Modify the content of an existing query.
+*   **Rename Queries:** Rename an existing query.
 *   **Delete Queries:** Remove saved queries.
 
 ## Installation
@@ -83,6 +84,17 @@ qsave edit <query-name>
 Example:
 ```bash
 qsave edit my_complex_join
+```
+
+### Rename a query
+
+```bash
+qsave rename <old-name> <new-name>
+```
+
+Example:
+```bash
+qsave rename my_typo_name my_correct_name
 ```
 
 ### Delete a query
