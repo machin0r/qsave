@@ -10,10 +10,35 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/alecthomas/chroma/v2/formatters"
+	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/alecthomas/chroma/v2/styles"
 	"github.com/atotto/clipboard"
 
 	_ "modernc.org/sqlite"
 )
+
+func outputFormattedText(output string) error {
+	lexer := lexers.Get("sql")
+	if lexer == nil {
+		lexer = lexers.Fallback
+	}
+
+	style := styles.Get("monokai")
+	if style == nil {
+		style = styles.Fallback
+	}
+	formatter := formatters.Get("terminal256")
+	if formatter == nil {
+		formatter = formatters.Fallback
+	}
+
+	iterator, err := lexer.Tokenise(nil, output)
+	if err != nil {
+		return err
+	}
+	return formatter.Format(os.Stdout, style, iterator)
+}
 
 func getOrCreateDB() (*sql.DB, error) {
 	dirname, err := os.UserHomeDir()
@@ -190,7 +215,9 @@ func searchQuery(searchToken string, db *sql.DB) {
 	for rows.Next() {
 		var name, body string
 		rows.Scan(&name, &body)
-		fmt.Printf("--- NAME: %s ---\n%s\n\n", name, body)
+		fmt.Printf("--- NAME: %s ---\n", name)
+		outputFormattedText(body)
+		fmt.Print("\n\n")
 	}
 }
 
@@ -219,7 +246,12 @@ func showQuery(queryName string, db *sql.DB) error {
 		}
 		return err
 	}
-	fmt.Printf("--- NAME: %s ---\n%s\n\n", name, body)
+	fmt.Printf("--- NAME: %s ---\n", name)
+
+	if err := outputFormattedText(body); err != nil {
+		fmt.Println(body)
+	}
+	fmt.Print("\n\n")
 
 	err = clipboard.WriteAll(body)
 	if err != nil {
